@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <title>CineBase</title>
+  </head>
+  <body>
+    <script type="text/x-handlebars" data-template-name="application">
+      <h1>Manage Your Flix</h1>
+
+      {{outlet}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="movies">
+      <ul>
+        {{#each movie in model}}
+          <li>
+            <label>{{movie.title}}</label><button {{action "removeMovie" movie}}>X</button>
+          </li>
+        {{/each}}
+      </ul>
+
+      {{input value=newTitle type="text" placeholder="New Movie"}}
+      <button {{action "addMovie"}}>Add Movie</button>
+    </script>
+
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ember.js/1.0.0/ember.prod.js"></script>
+    <script type="text/javascript" src="cinebase.js"></script>
+  </body>
+</html>
