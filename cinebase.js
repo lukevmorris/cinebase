@@ -1,38 +1,64 @@
-var Cinebase = Ember.Application.create();
+window.Cinebase = Ember.Application.create();
+
+Cinebase.ApplicationAdapter = DS.LSAdapter.extend({
+  namespace: 'cinebase-emberjs'
+});
 
 Cinebase.Router.map(function () {
   this.resource('movies', { path: '/' });
 });
 
-Cinebase.Movie = Ember.Object.extend({
-  title: ''
+Cinebase.Movie = DS.Model.extend({
+  title: DS.attr('string'),
+  isOwned: DS.attr('boolean')
 });
 
-var movies = [
-  Cinebase.Movie.create({title: 'Iron Man 3'}),
-  Cinebase.Movie.create({title: 'The Avengers'}),
-  Cinebase.Movie.create({title: 'The Waitress'}),
-  Cinebase.Movie.create({title: 'The Notebook'})
-]
+Cinebase.MovieController = Ember.ObjectController.extend({
+  actions : {
+    removeMovie : function () {
+      var movie = this.get('model');
+      movie.deleteRecord();
+      movie.save();
+    }
+  },
+
+  isOwned : function (key, value) {
+    var movie = this.get('model');
+
+    if (value === undefined) {
+      return movie.get('isOwned');
+    } else {
+      movie.set('isOwned', value);
+      movie.save();
+      return value;
+    }
+  }.property('model.isOwned')
+});
 
 Cinebase.MoviesRoute = Ember.Route.extend({
   model: function() {
-    return movies;
+    return this.store.find('movie');
   }
 });
 
 Cinebase.MoviesController = Ember.ArrayController.extend({
   actions : {
     addMovie : function () {
-      this.pushObject(Cinebase.Movie.create({
-        title: this.get('newTitle')
-      }));
+      var newTitle = this.get('newTitle');
+
+      if (!newTitle.trim()) { return; }
+
+      var movie = this.store.createRecord('movie', {
+        title: newTitle
+      });
 
       this.set('newTitle','');
+      movie.save();
     },
 
     removeMovie : function(movie) {
-      this.removeObject(movie);
+      this.store.deleteRecord(movie);
+      movie.save();
     }
   }
 });

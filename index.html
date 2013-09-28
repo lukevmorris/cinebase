@@ -11,21 +11,25 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name="movies">
+      {{input value=newTitle type="text" placeholder="New Movie"}}
+      <button {{action "addMovie"}}>Add Movie</button>
+
       <ul>
-        {{#each movie in model}}
+        {{#each itemController="movie"}}
           <li>
-            <label>{{movie.title}}</label><button {{action "removeMovie" movie}}>X</button>
+            {{input type="checkbox" checked=isOwned}}
+            <label>{{title}}</label>
+            <button {{action "removeMovie"}}>x</button>
           </li>
         {{/each}}
       </ul>
-
-      {{input value=newTitle type="text" placeholder="New Movie"}}
-      <button {{action "addMovie"}}>Add Movie</button>
     </script>
 
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ember.js/1.0.0/ember.prod.js"></script>
+    <script type="text/javascript" src="../emberjs/js/libs/ember-data.js"></script>
+    <script type="text/javascript" src="../emberjs/js/libs/localstorage_adapter.js"></script>
     <script type="text/javascript" src="cinebase.js"></script>
   </body>
 </html>
